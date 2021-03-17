@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.jevon.dao.OrderDaoMapper">
+
+	<!-- 根据用户id获取当前订单 -->
+	  
+	<select id="getCurrentOrderByUserId" resultType="com.jevon.entity.Order" parameterType="int">
+		SELECT * FROM morder WHERE user_id=#{0} and state=0
+	</select>
+	
+	<!--
+		新建现有订单
+	  -->
+	<insert id="createNewCurOrder" parameterType="int">
+		INSERT INTO morder set user_id=#{0}
+	</insert>
+	
+	
+
+	<select id="matchOrderMed" resultType="int" parameterType="Map">
+		select id from ordermed where med_id= #{med_id} and order_id=#{order_id}
+	</select>
+
+	<!--
+		将药品添加到订单中
+	  -->
+	<insert id="addMedToOrder" parameterType="Map">
+		INSERT INTO ordermed set med_id = #{med_id},order_id = #{order_id},med_num = 1
+	</insert>
+
+	<update id="addMednum" parameterType="int">
+		UPDATE ordermed set med_num = med_num+1 where id=#{om_id}
+	</update>
+
+	<update id="subMednum" parameterType="int">
+		UPDATE ordermed set med_num = med_num-1 where id=#{om_id}
+	</update>
+	
+	<delete id="deleteMedOrder" parameterType="int">
+		DELETE FROM ordermed where id = #{om_id}
+	</delete>
+
+	<select id="getOrderTotalSum" resultType="float" parameterType="int">
+		SELECT SUM(price*med_num) AS total_sum FROM Medicine AS m JOIN ordermed AS o WHERE m.id = o.med_id AND o.order_id=#{0}
+	</select>
+	
+	
+	<update id="updateSumToOrder" parameterType="Map">
+		UPDATE morder set total_sum = #{total_sum} where id = #{order_id}
+	</update>
+	
+	
+	<!-- 获取当前订单的药品  -->
+	
+	<select id="getMedListFromCurOrder" resultType="com.jevon.entity.MedInOrder" parameterType="int">
+		SELECT om.`med_id`,om.`id` as om_id , m.`name`,m.`price`,m.pic,m.`prescript`,m.`packing_size`,om.`med_num`,o.`total_sum` FROM medicine AS m , ordermed AS om ,morder AS o   WHERE m.id = om.`med_id` AND o.`id` = om.`order_id` AND o.`state`=0 AND o.`user_id`=#{0}
+	</select>
+	
+	<select id="getCurMednumByOMId" resultType="int" parameterType="int">
+		SELECT med_num from ordermed where id = #{0}
+	</select>
+	
+	
+	<update id="addSumToOrder" parameterType="Map">
+		UPDATE morder set total_sum = total_sum + #{price} where id = #{order_id}
+	</update>
+	
+	
+	<update id="updateOrderState" parameterType="Map">
+		UPDATE morder set state = #{state} where id = #{order_id}
+	</update>
+
+	<select id="getUserMoney" resultType="float" parameterType="int">
+		SELECT money from user where id = #{0}
+	</select>
+	
+	<update id="subUserMoney" parameterType="Map">
+		UPDATE user set money = money-#{spend} where id = #{user_id}
+	</update>
+	
+	<update id="updateOrderUserInfo" parameterType="Map">
+		UPDATE morder set user_name=#{user_name},user_phone=#{user_phone},user_address=#{user_address},speed = #{speed},pay_time = CURRENT_TIMESTAMP where id = #{order_id}
+	</update>
+	
+	<update id="updateCheckOrderInfo" parameterType="Map">
+		UPDATE morder set user_name=#{user_name},user_phone=#{user_phone},user_address=#{user_address},speed = #{speed},need_check = 1,check_pic=#{check_pic},pay_time = CURRENT_TIMESTAMP where id = #{order_id}
+	</update>
+	
+	<select id="getWaitingOrderListByDescTime" resultType="com.jevon.entity.Order">
+		SELECT * from morder where state = 1 and need_check=0 ORDER BY pay_time DESC; 
+	</select>
+	
+	<select id="getTakedOrderListByDistId" resultType="com.jevon.entity.Order" parameterType="int">
+		SELECT * from morder where state = 2 and need_check=0 and distributer_id = #{0} ORDER BY pay_time DESC; 
+	</select>
+	
+	<select id="getFinishedOrderListByDistId" resultType="com.jevon.entity.Order" parameterType="int">
+		SELECT * from morder where state = 3 and need_check=0 and distributer_id = #{0} ORDER BY finish_time DESC; 
+	</select>
+	
+	<select id="getMedListByOrderId" resultType="com.jevon.entity.MedInOrder" parameterType="int">
+		SELECT m.`pic`,om.`med_id`,om.`id` as om_id , m.`name`,m.`price`,m.`prescript`,m.`packing_size`,om.`med_num`,o.`total_sum` FROM medicine AS m , ordermed AS om ,morder AS o   WHERE m.id = om.`med_id` AND o.`id` = om.`order_id` AND o.`id`=#{0}
+	</select>
+	
+	<select id="getOrderInfoByOrderId" resultType="com.jevon.entity.OrderDetail" parameterType="int">
+		SELECT * from morder where id = #{0}
+	</select>
+	
+	<update id="takeOrderByDistId" parameterType="Map">
+		UPDATE morder set state = 2 ,distributer_id = #{dist_id} where id =#{order_id}
+	</update>
+	
+	<update id="finishOrder" parameterType="int">
+		UPDATE morder set state = 3,finish_time = CURRENT_TIMESTAMP where id = #{0}
+	</update>
+	
+	<select id="getStartingOrderByUserId" resultType="com.jevon.entity.Order" parameterType="int">
+		SELECT id,total_sum,state,pay_time,finish_time,need_check FROM morder WHERE (state = 1 OR state = 2  OR need_check = 1 ) AND user_id = #{0} ORDER BY pay_time DESC
+	</select>
+	
+	
+	
+	<select id="getFinishedOrderByUserId" resultType="com.jevon.entity.Order" parameterType="int">
+		SELECT id,total_sum,state,pay_time,finish_time,need_check FROM morder WHERE (state = 3 OR state = -1 OR need_check = -1) AND user_id = #{0}	ORDER BY finish_time DESC
+	</select>
+	
+
+</mapper>
+

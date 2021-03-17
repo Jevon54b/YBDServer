@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.2.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+
+      <!--1. 配置数据源 -->
+	  <context:property-placeholder location="classpath:jdbc.properties"/>
+      <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+      	<property name="url" value="${jdbc.url}"></property>
+      	<property name="username" value="${jdbc.user}"></property>
+      	<property name="password" value="${jdbc.pwd}"></property>
+      </bean>
+      
+      <!--2.配置扫描存放sql语句的局部配置文件 -->
+      <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+      	<!-- 指定数据源 -->
+      	<property name="dataSource" ref="dataSource"></property>
+      	<!-- 配置SQL局部配置文件的文件，cn/java/dao/*.xml表示只扫描cn/java/dao下的*.xml文件 -->
+      	<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+      </bean>
+      
+      <!-- 3.配置扫描dao层接口类,将接口与sql配置文件关联 -->
+      <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+      	<!-- 指定dao接口类的存放位置 -->
+      	<property name="basePackage" value="com.jevon.dao"></property>
+      </bean>
+
+
+
+
+</beans>

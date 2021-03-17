@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.jevon.dao.MedDaoMapper">
+
+	<!--
+		根据类型id查询药品
+	  -->
+	<select id="getMedListByTypeId" resultType="com.jevon.entity.MedicineBrief" parameterType="Map">
+		SELECT id,name,price,prescript,note,pic,salesnum,med_type FROM medicine WHERE med_type=#{type_id} ORDER BY ${sort_way}
+	</select>
+
+
+	<!--
+		根据药品id查询药品
+	  -->
+	<select id="getMedDetailById" resultType="com.jevon.entity.MedicineDetail" parameterType="int">
+		SELECT * FROM medicine WHERE id=#{0}
+	</select>
+	
+	<!--
+		根据关键词模糊查询药品
+	  -->
+	<select id="selectMedByMatching" resultType="com.jevon.entity.MedicineBrief" parameterType="Map">
+		SELECT * FROM medicine WHERE CONCAT(NAME,note) LIKE #{key_word} ORDER BY ${sort_way}
+	</select>
+	
+	<select id="selectSalesNumTopNMed" resultType="com.jevon.entity.MedicineBrief" parameterType="int">
+		SELECT  id,pic,name,price,salesnum FROM medicine ORDER BY salesnum DESC LIMIT 5
+	</select>
+
+</mapper>
+

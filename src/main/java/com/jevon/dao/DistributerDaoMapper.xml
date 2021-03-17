@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.jevon.dao.DistributerDaoMapper">
+
+	<!--
+		查询登录用户是否合法
+	  -->
+	<select id="isValid" resultType="com.jevon.entity.Distributer" parameterType="Map">
+		SELECT * FROM distributer WHERE phone='${phone}' AND PASSWORD='${password}'
+	</select>
+	
+
+	<!-- 
+		2.select语句返回List<Map<String,Object>，可以不使用实体类,直接用Map数据类型，更加简单，简化程序
+	 -->
+	<select id="getAllDistributer" resultType="com.jevon.entity.Distributer">
+		SELECT * FROM distributer
+	</select>
+	
+	<!-- 
+		3.SQL语句带一个参数
+		parameterType：指定接收参数类型，返回一条记录，用下标取参数
+		parameterType：参数类型
+	 -->
+	<select id="selectByPrimaryKey" resultType="com.jevon.entity.Distributer" parameterType="INT">
+		SELECT * FROM distributer WHERE id=#{0}
+	</select>
+	
+	<select id="selectByPhone" resultType="com.jevon.entity.Distributer" parameterType="String">
+		SELECT * FROM distributer WHERE phone=#{0}
+	</select>
+	
+	
+	<!-- 添加数据
+		5. delete、insert、update操作没有resultType属性，默认返回int型
+		  parameterType=Map，表示参数类型为Map，用Map封装参数
+		  #表示在获取参数时可防止SQL注入攻击，应尽量使用#；模糊查询时，使用$
+	      INSERT INTO users SET username=，这种SQL语句是MmySql特有的扩展功能
+	 -->
+	<insert id="addDistributer" parameterType="Map">
+		INSERT INTO distributer SET name=#{name},PASSWORD=#{password},id_no=#{id_no},phone=#{phone}
+	</insert>
+	
+	
+
+
+
+</mapper>
+

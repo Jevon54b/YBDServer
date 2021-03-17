@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.jevon.dao.DiscDaoMapper">
+
+	<!--
+		1.查询article
+	  -->
+	<select id="selectArticleById" resultType="com.jevon.entity.Article" parameterType="String">
+		SELECT * FROM article WHERE id='${_parameter}';
+	</select>
+	
+	<select id="getAllArticles" resultType="com.jevon.entity.Article">
+		SELECT id,pic,title,author,realease_time,read_num,comment_num FROM article ORDER BY realease_time desc; 
+	</select>
+	
+	<!--
+		2.查询comment
+	  -->
+	<select id="selectCommentById" resultType="com.jevon.entity.Comment" parameterType="String">
+		SELECT * FROM comment WHERE id='${_parameter}'
+	</select>
+
+
+	<!-- 
+		3.select语句返回List<Map<String,Object>，可以不使用实体类,直接用Map数据类型，更加简单，简化程序
+	 -->
+	<select id="getAllCommentByID" resultType="com.jevon.entity.Comment" parameterType="String">
+		SELECT * FROM comment WHERE article_id='${_parameter}'
+	</select>
+	
+	
+	<!-- 添加文章
+		4. delete、insert、update操作没有resultType属性，默认返回int型
+		  parameterType=Map，表示参数类型为Map，用Map封装参数
+		  #表示在获取参数时可防止SQL注入攻击，应尽量使用#；模糊查询时，使用$
+	      INSERT INTO users SET username=，这种SQL语句是MmySql特有的扩展功能
+	 -->
+	<insert id="addArticle" parameterType="Map">
+		INSERT INTO article 
+		SET id=#{id},title=#{title},author=#{author},realease_time=#{realease_time},content=#{content}
+	</insert>
+	
+	<!-- 添加评论
+		5. comment
+	 -->
+	<insert id="addComment" parameterType="Map">
+		INSERT INTO comment 
+		SET article_id=#{article_id},commenter=#{commenter},content=#{content},commenter_id=#{user_id}
+	</insert>
+	
+	<!-- 删除评论
+		6.comment
+	 -->
+	
+	<delete id="deleteComment" parameterType="String">
+		DELETE FROM Comment
+		WHERE id='${_parameter}';
+	</delete>
+
+	<!-- 删除评论
+		7.article
+	 -->
+	
+	<delete id="deleteArticle" parameterType="String">
+		DELETE FROM article
+		WHERE id='${_parameter}';
+	</delete>
+	
+	<update id="AddArticleReadNum" parameterType="String">
+		UPDATE article set read_num = read_num+1 where id=#{0}
+	</update> 
+	
+	<update id="AddArticleCommentNum" parameterType="String">
+		UPDATE article set comment_num = comment_num+1 where id=#{0}
+	</update> 
+	
+	<update id="SubArticleCommentNum" parameterType="String">
+		UPDATE article set comment_num = comment_num-1 where id=#{0}
+	</update> 
+	
+	
+</mapper>
+
