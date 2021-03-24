@@ -65,4 +65,10 @@ public interface OrderDaoMapper {
 	List<Order> getStartingOrderByUserId(int user_id);
 
 	List<Order> getFinishedOrderByUserId(int user_id);
+
+	List<Order> getOrderList(Map<String,Object> map);
+
+	int getOrderCount();
+
+	int updateAddressLastTime(int address_id);
 }

@@ -26,9 +26,13 @@ public class WSMessageService {
     }
 
     public SupportInfo getSupportInfo(){
-        Long id = websocket.getFreeSupportId();
-        if (id == 0L) return new SupportInfo(0,0L);
-        else if(id < 0L) return new SupportInfo(-1,0L);
+        String id = websocket.getFreeSupportId();
+        if (id.equals("0")) return new SupportInfo(0,"");
+        else if(id.equals("-1")) return new SupportInfo(-1,"");
         else return new SupportInfo(1,id);
+    }
+
+    public void closeAllSupport(){
+        websocket.closeAllSupport();
     }
 }

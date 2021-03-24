@@ -10,6 +10,7 @@ import com.jevon.service.DistributerService;
 import com.jevon.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -79,8 +80,49 @@ public class DistributerController {
 		default:
 			return ServerResponse.createByErrorMessage("登录失败,系统错误");
 		}
-		
-		
-		
 	}
+
+	@CrossOrigin
+	@ResponseBody
+	@RequestMapping(value="getAllDistributer.do",method=RequestMethod.GET)
+	public ServerResponse getAllDistributer(){
+		return ServerResponse.createBySuccess("获取骑手列表成功",distService.getAllDistributer());
+	}
+
+	@CrossOrigin
+	@ResponseBody
+	@RequestMapping(value="getDistributerCount.do",method=RequestMethod.GET)
+	public ServerResponse getDistributerCount(){
+		return ServerResponse.createBySuccess("获取骑手数量成功","{'distributerCount':"+distService.getAllDistributer().size()+"}");
+	}
+
+	@CrossOrigin
+	@ResponseBody
+	@RequestMapping(value="updateDistributerStatus.do",method=RequestMethod.GET)
+	public ServerResponse updateDistributerStatus(HttpServletRequest rs){
+		String id = rs.getParameter("id");
+		String status = rs.getParameter("status");
+		int result = distService.updateDistributerStatus(id,status);
+		if (result == 1){
+			return ServerResponse.createBySuccessMessage("更新骑手审核状态成功");
+		}else{
+			return ServerResponse.createByErrorMessage("更新骑手审核状态失败");
+		}
+	}
+
+	@CrossOrigin
+	@ResponseBody
+	@RequestMapping(value="deleteDistributer.do",method=RequestMethod.GET)
+	public ServerResponse deleteDistributer(HttpServletRequest rs){
+		String id = rs.getParameter("id");
+		int result = distService.deleteDistributer(id);
+		if (result == 1){
+			return ServerResponse.createBySuccessMessage("删除骑手成功");
+		}else if (result == -1){
+			return ServerResponse.createByErrorMessage("删除失败,该骑手还存在绑定的订单。");
+		}else{
+			return ServerResponse.createByErrorMessage("删除骑手失败");
+		}
+	}
+
 }

@@ -44,10 +44,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="addUser" parameterType="Map">
 		INSERT INTO user SET name=#{name},PASSWORD=#{password},phone=#{phone},nick=#{nick};
 	</insert>
+
+
+	<insert id="createAddressInfo" parameterType="Map">
+		INSERT INTO addressInfo SET user_id = #{user_id},phone = #{phone},user_name = #{user_name},latitude = #{latitude},
+		                            longitude = #{longitude},address = #{address};
+	</insert>
 	
-	
+	<update id="updateAddressInfo" parameterType="Map">
+		UPDATE addressInfo SET phone = #{phone},user_name = #{user_name},latitude = #{latitude},
+							   longitude = #{longitude},address = #{address}, last_time = CURRENT_TIMESTAMP
+							WHERE id = #{id};
+	</update>
 
+	<select id="getAddressInfoList" parameterType="int" resultType="com.jevon.entity.AddressInfo">
+		SELECT * FROM addressInfo WHERE user_id = #{0} ORDER BY last_time desc ;
+	</select>
 
-
+	<select id="getLastUseAddressInfo" parameterType="int" resultType="com.jevon.entity.AddressInfo">
+		SELECT * FROM addressInfo WHERE user_id = #{0} ORDER BY last_time desc LIMIT 1 ;
+	</select>
 </mapper>
 

@@ -8,7 +8,7 @@ public class MedicineDetail {
 	private int prescript;
 	private String note;
 	private String pic;
-	private int salesum;
+	private int salesnum;
 	private int med_type;
 	private String type_name;
 	private String normal_name;
@@ -117,12 +117,15 @@ public class MedicineDetail {
 	public void setPic(String pic) {
 		this.pic = pic;
 	}
-	public int getSalesum() {
-		return salesum;
+
+	public int getSalesnum() {
+		return salesnum;
 	}
-	public void setSalesum(int salesum) {
-		this.salesum = salesum;
+
+	public void setSalesnum(int salesnum) {
+		this.salesnum = salesnum;
 	}
+
 	public int getMed_type() {
 		return med_type;
 	}
@@ -214,8 +217,5 @@ public class MedicineDetail {
 	public void setManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
 	}
-
-	
-	
 
 }

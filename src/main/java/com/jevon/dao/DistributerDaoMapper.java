@@ -29,7 +29,7 @@ public interface DistributerDaoMapper {
 	//根据id查询用户
 	Distributer selectByPrimaryKey(int id);
 
+	int updateDistributerStatus(Map<String,String> map)throws SQLException, IOException;
 
-	//修改用户信息
-	//  int updateByPrimaryKey(User user);
+	int deleteDistributer(String id)throws SQLException, IOException;
 }

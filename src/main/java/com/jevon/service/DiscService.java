@@ -7,7 +7,9 @@ import java.util.List;
 
 
 public interface DiscService {
-	
+
+	public boolean addArticle(String title,String author,String pic,String content);
+
 	public Article getArticle(String id);
 	
 	public List<Comment> getArticleCommentList(String id);
@@ -20,5 +22,7 @@ public interface DiscService {
 	public boolean deleteAComment(String id);
 	
 	public boolean deleteAnArticle(String id);
+
+	public boolean updateArticleById(String author,String title,String content,String pic,String article_id);
 	
 }

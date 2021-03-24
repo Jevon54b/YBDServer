@@ -155,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
 
 	// 0为余额已扣除但提交订单失败，1为成功，-1为余额不足,-2为用户余额扣除失败且订单未提交,-3为订单支付成功但数据库更新总额失败
 	@Override
-	public int payNormalOrder(int user_id, int speed,String name,String phone,String address) {
+	public int payNormalOrder(int user_id, int speed,String name,String phone,String address,int address_id) {
 		Float money = odm.getUserMoney(user_id);
 		Order curOrder = odm.getCurrentOrderByUserId(user_id);
 		int order_id = curOrder.getId();
@@ -207,6 +207,7 @@ public class OrderServiceImpl implements OrderService {
 			e.printStackTrace();
 			return -3;
 		}
+		odm.updateAddressLastTime(address_id);
 		return 1;
 
 	}
@@ -371,6 +372,21 @@ public class OrderServiceImpl implements OrderService {
 		}else {
 			return list;
 		}
+	}
+
+
+
+	@Override
+	public List<Order> getOrderList(int limit, int offset) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("limit",limit);
+		map.put("offset",offset);
+		return odm.getOrderList(map);
+	}
+
+	@Override
+	public int getOrderCount() {
+		return odm.getOrderCount();
 	}
 
 }

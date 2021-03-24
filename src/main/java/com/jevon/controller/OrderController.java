@@ -6,10 +6,7 @@ import com.jevon.entity.ServerResponse;
 import com.jevon.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -68,10 +65,11 @@ public class OrderController {
 	public ServerResponse postNormalOrder(HttpServletRequest rs) {
 		int user_id = Integer.parseInt(rs.getParameter("user_id"));
 		int speed = Integer.parseInt(rs.getParameter("speed"));
+		int address_id = Integer.parseInt(rs.getParameter("address_id"));
 		String phone = rs.getParameter("user_phone");
 		String name = rs.getParameter("user_name");
 		String address = rs.getParameter("user_address");
-		int result = os.payNormalOrder(user_id, speed,name,phone,address);
+		int result = os.payNormalOrder(user_id, speed,name,phone,address,address_id);
 		switch (result) {
 			case 1:
 				return ServerResponse.createBySuccessMessage("订单支付成功");
@@ -218,5 +216,19 @@ public class OrderController {
 		return ServerResponse.createBySuccess("获取当前订单列表成功", os.getStartingOrderByUserId(user_id));
 	}
 
+	@CrossOrigin
+	@ResponseBody
+	@RequestMapping(value = "getOrderList.do")
+	public ServerResponse getOrderList(HttpServletRequest rs){
+		int limit = Integer.valueOf(rs.getParameter("limit"));
+		int offset = Integer.valueOf(rs.getParameter("offset"));
+		return ServerResponse.createBySuccess("获取订单列表成功",os.getOrderList(limit,offset));
+	}
 
+	@CrossOrigin
+	@ResponseBody
+	@RequestMapping(value = "getOrderCount.do")
+	public ServerResponse getOrderCount(HttpServletRequest rs){
+		return ServerResponse.createBySuccess("获取订单数量成功",os.getOrderCount());
+	}
 }

@@ -15,7 +15,7 @@ public interface OrderService {
 	
 	int subMednumInOrder(int om_id,int user_id);
 	
-	int payNormalOrder(int user_id,int speed,String name,String phone,String address);
+	int payNormalOrder(int user_id,int speed,String name,String phone,String address,int address_id);
 	
 	int postPrescriptOrder(int user_id,int speed,String name,String phone,String address,String picPath);
 
@@ -34,4 +34,8 @@ public interface OrderService {
 	List<Order> getStartingOrderByUserId(int user_id);
 	
 	List<Order> getFinishedOrderByUserId(int user_id);
+
+	List<Order> getOrderList(int limit,int offset);
+
+	int getOrderCount();
 }

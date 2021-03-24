@@ -32,5 +32,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT  id,pic,name,price,salesnum FROM medicine ORDER BY salesnum DESC LIMIT 5
 	</select>
 
+
+	<select id="getAllMedicine" resultType="com.jevon.entity.MedicineDetail" parameterType="Map">
+		SELECT * FROM medicine LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="getMedicineCount" resultType="com.jevon.entity.CountObject">
+		SELECT COUNT(*) as 'count' FROM medicine
+	</select>
+
+	<update id="updateMedicine" parameterType="Map">
+		UPDATE medicine
+		SET name = #{name}, price = #{price}, prescript = #{prescript},note = #{note},pic = #{pic},med_type = #{med_type},normal_name = #{normal_name},goods_name = #{goods_name},
+		    composition = #{composition},avoid = #{avoid},`function` = #{function},`usage` = #{usage},properties = #{properties}, packing_size = #{packing_size},adverse_reaction = #{adverse_reaction},
+			store_condition = #{store_condition}, valid_time = #{valid_time}, attensions = #{attensions}, register_number = #{register_number}, manufacturer = #{manufacturer}
+		WHERE id = #{med_id}
+	</update>
+
+	<insert id="addMedicine" parameterType="Map">
+		INSERT INTO medicine
+		SET name= #{name}, price = #{price}, prescript = #{prescript},note = #{note},pic = #{pic},med_type = #{med_type},normal_name = #{normal_name},goods_name = #{goods_name},
+			composition = #{composition},avoid = #{avoid},`function` = #{function},`usage` = #{usage},properties = #{properties}, packing_size = #{packing_size},adverse_reaction = #{adverse_reaction},
+			store_condition = #{store_condition}, valid_time = #{valid_time}, attensions = #{attensions}, register_number = #{register_number}, manufacturer = #{manufacturer}
+	</insert>
+
+	<delete id="deleteMedicine" parameterType="String">
+		DELETE FROM medicine
+		WHERE id='${_parameter}';
+	</delete>
+
+
+	<select id="getAllMedType" resultType="com.jevon.entity.MedType">
+		select * FROM medtype;
+	</select>
+
+	<insert id="addMedType" parameterType="String">
+		INSERT INTO medtype SET name= '${_parameter}';
+	</insert>
+
+	<select id="getMedTypeByTypeId" parameterType="String" resultType="String">
+		SELECT name FROM medtype WHERE id = '${_parameter}';
+	</select>
+
 </mapper>
 

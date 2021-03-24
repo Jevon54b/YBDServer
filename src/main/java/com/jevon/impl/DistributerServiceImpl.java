@@ -2,13 +2,17 @@ package com.jevon.impl;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.jevon.dao.DistributerDaoMapper;
 import com.jevon.entity.Distributer;
 import com.jevon.service.DistributerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -77,8 +81,45 @@ public class DistributerServiceImpl implements DistributerService {
 		Distributer distributer=distMapper.selectByPhone(phone);
 		return distributer;
 	}
-	
-	
-	
+
+	@Override
+	public List<Distributer> getAllDistributer() {
+		try {
+			return distMapper.getAllDistributer();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return new ArrayList<>();
+	}
+
+	@Override
+	public int updateDistributerStatus(String id, String status) {
+		Map<String,String> map = new HashMap<>();
+		map.put("id",id);
+		map.put("status",status);
+		try {
+			distMapper.updateDistributerStatus(map);
+			return 1;
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public int deleteDistributer(String id) {
+		try {
+			distMapper.deleteDistributer(id);
+			return 1;
+		}catch (DataIntegrityViolationException e){
+			return -1;
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 
 }

@@ -30,7 +30,6 @@
 	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"></bean>
 
 	<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
-
 	<!-- 配置文件上传 -->
 <!--	<bean id="multipartResolver"-->
 <!--		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->

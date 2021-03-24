@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getAllArticles" resultType="com.jevon.entity.Article">
-		SELECT id,pic,title,author,realease_time,read_num,comment_num FROM article ORDER BY realease_time desc; 
+		SELECT id,pic,title,author,realease_time,read_num,comment_num,content FROM article ORDER BY realease_time desc;
 	</select>
 	
 	<!--
@@ -41,8 +41,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 -->
 	<insert id="addArticle" parameterType="Map">
 		INSERT INTO article 
-		SET id=#{id},title=#{title},author=#{author},realease_time=#{realease_time},content=#{content}
+		SET title=#{title},author=#{author},content=#{content},pic=#{pic}
 	</insert>
+
+	<!-- 更新文章 -->
+	<update id="updateArticleById" parameterType="Map">
+		UPDATE article set author=#{author},title=#{title},content=#{content},pic=#{pic} where id=#{article_id}
+	</update>
 	
 	<!-- 添加评论
 		5. comment

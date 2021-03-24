@@ -20,7 +20,18 @@ public class DiscServiceImpl implements DiscService {
 
 	@Autowired
 	DiscDaoMapper distMapper;
-	
+
+	@Override
+	public boolean addArticle(String title, String author, String pic, String content) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("title", title);
+		map.put("author", author);
+		map.put("content", content);
+		map.put("pic", pic);
+		distMapper.addArticle(map);
+		return true;
+	}
+
 	@Override
 	public Article getArticle(String id){
 		distMapper.AddArticleReadNum(id);
@@ -66,7 +77,18 @@ public class DiscServiceImpl implements DiscService {
 		distMapper.deleteArticle(id);
 		return true;
 	}
-	
-	
-	
+
+	@Override
+	public boolean updateArticleById(String author, String title, String content,String pic, String article_id) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("article_id", article_id);
+		map.put("author", author);
+		map.put("content", content);
+		map.put("title", title);
+		map.put("pic",pic);
+		distMapper.updateArticleById(map);
+		return true;
+	}
+
+
 }

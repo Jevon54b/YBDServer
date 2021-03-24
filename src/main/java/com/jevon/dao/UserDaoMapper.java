@@ -1,5 +1,6 @@
 package com.jevon.dao;
 
+import com.jevon.entity.AddressInfo;
 import com.jevon.entity.User;
 
 import java.io.IOException;
@@ -31,4 +32,12 @@ public interface UserDaoMapper {
 
 	//修改用户信息
 	//  int updateByPrimaryKey(User user);
+
+	int createAddressInfo(Map<String,Object> map);
+
+	int updateAddressInfo(Map<String,Object> map);
+
+	List<AddressInfo> getAddressInfoList(int user_id);
+
+	AddressInfo getLastUseAddressInfo(int user_id);
 }

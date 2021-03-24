@@ -40,5 +40,7 @@ public interface DiscDaoMapper {
     int AddArticleCommentNum(String article_id);
 
     int SubArticleCommentNum(String article_id);
- 
+
+    int updateArticleById(Map<String,Object> map);
+
 }

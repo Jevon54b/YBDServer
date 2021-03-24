@@ -2,9 +2,9 @@ package com.jevon.message;
 
 public class SupportInfo {
     private int code; // 0 : 当前无客服在线; 1:当前有空闲客服 ； -1：当前客服忙线。
-    private Long supportId;
+    private String supportId;
 
-    public SupportInfo(int code, Long supportId) {
+    public SupportInfo(int code, String supportId) {
         this.code = code;
         this.supportId = supportId;
     }
@@ -17,11 +17,11 @@ public class SupportInfo {
         this.code = code;
     }
 
-    public Long getSupportId() {
+    public String getSupportId() {
         return supportId;
     }
 
-    public void setSupportId(Long supportId) {
+    public void setSupportId(String supportId) {
         this.supportId = supportId;
     }
 }

@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 
 	<select id="getOrderTotalSum" resultType="float" parameterType="int">
-		SELECT SUM(price*med_num) AS total_sum FROM Medicine AS m JOIN ordermed AS o WHERE m.id = o.med_id AND o.order_id=#{0}
+		SELECT SUM(price*med_num) AS total_sum FROM medicine AS m JOIN ordermed AS o WHERE m.id = o.med_id AND o.order_id=#{0}
 	</select>
 	
 	
@@ -127,7 +127,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getFinishedOrderByUserId" resultType="com.jevon.entity.Order" parameterType="int">
 		SELECT id,total_sum,state,pay_time,finish_time,need_check FROM morder WHERE (state = 3 OR state = -1 OR need_check = -1) AND user_id = #{0}	ORDER BY finish_time DESC
 	</select>
-	
 
+	<select id="getOrderList" resultType="com.jevon.entity.Order">
+		SELECT * FROM morder order by create_time desc  LIMIT #{limit} OFFSET #{offset};
+	</select>
+
+	<select id="getOrderCount" resultType="int">
+		select count(*) FROM morder;
+	</select>
+
+
+	<update id="updateAddressLastTime" parameterType="int" >
+		UPDATE addressInfo SET last_time = CURRENT_TIMESTAMP where id = #{0};
+	</update>
 </mapper>
 

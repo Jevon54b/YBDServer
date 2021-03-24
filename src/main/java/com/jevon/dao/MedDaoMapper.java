@@ -1,5 +1,7 @@
 package com.jevon.dao;
 
+import com.jevon.entity.CountObject;
+import com.jevon.entity.MedType;
 import com.jevon.entity.MedicineBrief;
 import com.jevon.entity.MedicineDetail;
 
@@ -18,4 +20,20 @@ public interface MedDaoMapper {
 	List<MedicineBrief> selectMedByMatching(Map<String, Object> map)throws SQLException,IOException;
 	
 	List<MedicineBrief> selectSalesNumTopNMed();
+
+	List<MedicineDetail> getAllMedicine(Map<String,Object> map);
+
+	CountObject getMedicineCount();
+
+	int updateMedicine(Map<String,Object> map);
+
+	int addMedicine(Map<String,Object> map);
+
+	int deleteMedicine(String id);
+
+	List<MedType> getAllMedType();
+
+	int addMedType(String name);
+
+	String getMedTypeByTypeId(String typeId);
 }

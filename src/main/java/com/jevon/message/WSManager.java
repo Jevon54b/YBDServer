@@ -12,7 +12,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
 
-@ServerEndpoint(value = "/WebSocketTest2/{supportId}/{type}",configurator = SpringConfigurator.class)
+@ServerEndpoint(value = "/SupportWebSocket/{supportId}/{type}",configurator = SpringConfigurator.class)
 public class WSManager {
     private static Logger logger = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
@@ -20,11 +20,11 @@ public class WSManager {
     private static int onlineCount = 0;
 
     //记录每个用户下多个终端的连接
-    private static Map<Long, Set<WSManager>> supportSockets = new HashMap<>();
+    private static Map<String, Set<WSManager>> supportSockets = new HashMap<>();
 
     //需要session来对用户发送数据, 获取连接特征supportId
     private Session session;
-    private Long supportId;
+    private String supportId;
     private int type; //0 -> 客服  1-> 用户
     private static final int SUPPORT_TYPE = 0;
     private static final int USER_TYPE = 1;
@@ -37,7 +37,7 @@ public class WSManager {
      * @param @throws IOException
      */
     @OnOpen
-    public void onOpen(@PathParam("supportId") Long supportId,@PathParam("type")int type,Session session) throws IOException {
+    public void onOpen(@PathParam("supportId") String supportId,@PathParam("type")int type,Session session) throws IOException {
         this.session = session;
         this.supportId = supportId;
         this.type = type;
@@ -165,17 +165,23 @@ public class WSManager {
         return false;
     }
 
-    public Long getFreeSupportId(){
+    public String getFreeSupportId(){
         if (supportSockets.size()<=0){
-            return 0L;
+            return "0";
         }else{
-            Iterator<Map.Entry<Long,Set<WSManager>>> it = supportSockets.entrySet().iterator();
+            Iterator<Map.Entry<String,Set<WSManager>>> it = supportSockets.entrySet().iterator();
             while(it.hasNext()){
-                Map.Entry<Long,Set<WSManager>> e = it.next();
+                Map.Entry<String,Set<WSManager>> e = it.next();
                 if (e.getValue().size()>1) continue;
                 else return e.getKey();
             }
-            return -1L;
+            return "-1";
+        }
+    }
+
+    public void closeAllSupport(){
+        if (supportSockets.size()>0){
+            supportSockets.clear();
         }
     }
 

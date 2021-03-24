@@ -44,8 +44,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="addDistributer" parameterType="Map">
 		INSERT INTO distributer SET name=#{name},PASSWORD=#{password},id_no=#{id_no},phone=#{phone}
 	</insert>
-	
-	
+
+	<update id="updateDistributerStatus" parameterType="Map">
+		UPDATE distributer set is_pass = #{status} where id = #{id}
+	</update>
+
+
+	<delete id="deleteDistributer" parameterType="String">
+		DELETE FROM distributer WHERE id='${_parameter}';
+	</delete>
 
 
 
